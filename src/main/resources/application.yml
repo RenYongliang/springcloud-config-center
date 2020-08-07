@@ -1,0 +1,34 @@
+server:
+  port: 8777
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:123456@120.76.128.254:9999/eureka/
+  instance:
+    prefer-ip-address: true #当猜测主机名时，服务器的IP地址应该在操作系统报告的主机名中使用
+#    ip-address: localhost
+
+#actuator 配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+spring:
+  application:
+    name: configservice
+  datasource:
+    url: jdbc:mysql://120.76.128.254:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2b8&useSSL=false&verifyServerCertificate=true&requireSSL=false&useOldAliasMetadataBehavior=true&allowMultiQueries=true
+    username: root
+    password: ryl123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: jdbc
+  cloud:
+    config:
+      server:
+        default-label: develop
+        jdbc:
+          sql: SELECT config_key, config_value FROM t_properties WHERE application = ? AND `profile` = ? AND label = ?
